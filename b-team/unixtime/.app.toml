@@ -1,0 +1,33 @@
+
+# Name of the application
+name = "unixtime"
+
+[Build]
+
+  # Command to build the application
+  command = "make clean docker_build"
+
+  # Specification of build inputs like source files, Makefiles, etc
+  [Build.Input]
+
+    # Inputs specified by path, matching only Git tracked files
+    [Build.Input.GitFiles]
+
+      # Relative paths to source files.
+      # Only files tracked by Git that are not in the .gitignore file are matched.
+      # The same patterns that git ls-files supports can be used.
+      paths = ["*.c", "Makefile", ".app.toml"]
+
+  # Specification of build outputs produced by the [Build.command]
+  [Build.Output]
+
+    [[Build.Output.File]]
+
+      # Path relative to the application directory
+      path = "dist/unixtime"
+
+      # Copy the file to a local directory
+      [Build.Output.File.FileCopy]
+
+        # Destination directory
+        path = "/tmp/baur_build_artifacts/$APPNAME-$GITCOMMIT"
