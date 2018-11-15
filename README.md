@@ -36,9 +36,9 @@ Some commands to start with are:
   baur ls apps
   ```
 - Build all applications with outstanding builds, upload their artifacts and
-  records the results:
+  record the results:
   ```
-  baur build --upload
+  baur build
   ```
   (The first run of the `baur build` command in this repository can take a bit
   longer because docker images are build during the build)
