@@ -25,7 +25,7 @@ name = "randomnumber"
       # This can be environment variables understood by the Golang tools, like GOPATH, GOFLAGS, etc.
       # If empty the default Go environment is used.
       # Valid variables: $ROOT
-      environment = ["GOFLAGS=-mod=vendor"]
+      environment = ["GOFLAGS=-mod=vendor","GO111MODULE=on"]
 
       # Paths to directories containing Golang source files.
       # All source files including imported packages are discovered,
