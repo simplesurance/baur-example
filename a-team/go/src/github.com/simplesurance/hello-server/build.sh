@@ -2,7 +2,7 @@
 
 set -eux -o pipefail
 
-DOCKER_IMG="golang@sha256:e8e4c4406217b415c506815d38e3f8ac6e05d0121b19f686c5af7eaadf96f081"
+DOCKER_IMG="golang@sha256:e7462ca504afc789d289f2bb5fd471815cc11833439d2fe4e61915b190045359"
 
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 TEAM_GO_PATH="$REPO_ROOT/a-team/go"
