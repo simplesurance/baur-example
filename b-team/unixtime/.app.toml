@@ -7,6 +7,10 @@ name = "unixtime"
   # Command to build the application
   command = "make clean docker_build"
 
+  # Repository relative paths to baur include files that the build inherits.
+  # Valid variables: $ROOT
+  includes = []
+
   # Specification of build inputs like source files, Makefiles, etc
   [Build.Input]
 
@@ -16,14 +20,15 @@ name = "unixtime"
       # Relative paths to source files.
       # Only files tracked by Git that are not in the .gitignore file are matched.
       # The same patterns that git ls-files supports can be used.
-      paths = ["*.c", "Makefile", ".app.toml"]
+      # Valid variables: $ROOT
+      paths = ["*.c", "Makefile"]
 
   # Specification of build outputs produced by the [Build.command]
   [Build.Output]
 
     [[Build.Output.File]]
 
-      # Path relative to the application directory
+      # Path relative to the application directory, valid variables: $APPNAME
       path = "dist/unixtime"
 
       # Copy the file to a local directory

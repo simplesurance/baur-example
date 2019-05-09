@@ -7,6 +7,10 @@ name = "hello-server"
   # Command to build the application
   command = "./build.sh"
 
+  # Repository relative paths to baur include files that the build inherits.
+  # Valid variables: $ROOT
+  includes = ["$ROOT/baur-includes/input_build_script.toml"]
+
   # Specification of build inputs like source files, Makefiles, etc
   [Build.Input]
 
@@ -16,7 +20,8 @@ name = "hello-server"
       # Relative path to source files,
       # supports Golang's Glob syntax (https://golang.org/pkg/path/filepath/#Match) and
       # ** to match files recursively
-      paths = [".app.toml", "build.sh"]
+      # Valid variables: $ROOT
+      paths = ["build.sh"]
 
     # Inputs specified by directories containing Golang applications
     [Build.Input.GolangSources]
@@ -37,7 +42,7 @@ name = "hello-server"
 
     [[Build.Output.File]]
 
-      # Path relative to the application directory
+      # Path relative to the application directory, valid variables: $APPNAME
       path = "dist/hello-server"
 
       # Copy the file to a local directory
