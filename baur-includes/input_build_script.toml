@@ -1,0 +1,70 @@
+
+[BuildInput]
+
+  # Inputs specified by file glob paths
+  [BuildInput.Files]
+
+    # Relative path to source files,
+    # supports Golang's Glob syntax (https://golang.org/pkg/path/filepath/#Match) and
+    # ** to match files recursively
+    # Valid variables: $ROOT
+    # paths = ["dbmigrations/*.sql"]
+
+  # Inputs specified by path, matching only Git tracked files
+  [BuildInput.GitFiles]
+
+    # Relative paths to source files.
+    # Only files tracked by Git that are not in the .gitignore file are matched.
+    # The same patterns that git ls-files supports can be used.
+    # Valid variables: $ROOT
+    paths = ["build.sh"]
+
+  # Inputs specified by directories containing Golang applications
+  [BuildInput.GolangSources]
+
+    # Environment to use when discovering Golang source files
+    # This can be environment variables understood by the Golang tools, like GOPATH, GOFLAGS, etc.
+    # If empty the default Go environment is used.
+    # Valid variables: $ROOT
+    # environment = ["GOFLAGS=-mod=vendor","GO111MODULE=on"]
+
+    # Paths to directories containing Golang source files.
+    # All source files including imported packages are discovered,
+    # files from Go's stdlib package and testfiles are ignored.
+    # paths = ["."]
+
+[BuildOutput]
+
+  [[BuildOutput.DockerImage]]
+
+    # Path to a file that is created by [Build.Command] and contains the image ID of the produced image (docker build --iidfile), valid variables: $APPNAME
+    # idfile = "$APPNAME-container.id"
+
+    # Registry repository the image is uploaded to
+    [BuildOutput.DockerImage.RegistryUpload]
+
+      # Repository path, format: [<server[:port]>/]<owner>/<repository>:<tag>, valid variables: $APPNAME
+      # repository = "my-company/$APPNAME"
+
+      # Tag that is applied to the image, valid variables: $APPNAME, $UUID, $GITCOMMIT
+      # tag = "$GITCOMMIT"
+
+  [[BuildOutput.File]]
+
+    # Path relative to the application directory, valid variables: $APPNAME
+    # path = "dist/$APPNAME.tar.xz"
+
+    # Copy the file to a local directory
+    [BuildOutput.File.FileCopy]
+
+      # Destination directory
+      # path = "/mnt/fileserver/build_artifacts/$APPNAME-$GITCOMMIT.tar.xz"
+
+    # Upload the file to S3
+    [BuildOutput.File.S3Upload]
+
+      # Bucket name, valid variables: $APPNAME
+      # bucket = "go-artifacts/"
+
+      # Remote File Name, valid variables: $APPNAME, $UUID, $GITCOMMIT
+      # dest_file = "$APPNAME-$GITCOMMIT.tar.xz"
