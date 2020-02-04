@@ -19,7 +19,7 @@ example repository:
 - Download the latest release archive from
   [Release Page](https://github.com/simplesurance/baur/releases) and copy
   `baur` into your `$PATH`
-- Run the `start_env.sh` script to start a PostgreSQL docker container:
+- Run the `start_env.sh` script to start a PostgreSQL and a Docker registry container:
   ```
   ./start_env.sh
   ```
