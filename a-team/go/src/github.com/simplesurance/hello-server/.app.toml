@@ -2,51 +2,8 @@
 # Name of the application
 name = "hello-server"
 
-[Build]
-
-  # Command to build the application
-  command = "./build.sh"
-
-  # Repository relative paths to baur include files that the build inherits.
-  # Valid variables: $ROOT
-  includes = ["$ROOT/baur-includes/input_build_script.toml"]
-
-  # Specification of build inputs like source files, Makefiles, etc
-  [Build.Input]
-
-    # Inputs specified by file glob paths
-    [Build.Input.Files]
-
-      # Relative path to source files,
-      # supports Golang's Glob syntax (https://golang.org/pkg/path/filepath/#Match) and
-      # ** to match files recursively
-      # Valid variables: $ROOT
-      paths = ["build.sh"]
-
-    # Inputs specified by directories containing Golang applications
-    [Build.Input.GolangSources]
-
-      # Environment to use when discovering Golang source files
-      # This can be environment variables understood by the Golang tools, like GOPATH, GOFLAGS, etc.
-      # If empty the default Go environment is used.
-      # Valid variables: $ROOT
-      environment = ["GOPATH=$ROOT/a-team/go"]
-
-      # Paths to directories containing Golang source files.
-      # All source files including imported packages are discovered,
-      # files from Go's stdlib package and testfiles are ignored.
-      paths = ["."]
-
-  # Specification of build outputs produced by the [Build.command]
-  [Build.Output]
-
-    [[Build.Output.File]]
-
-      # Path relative to the application directory, valid variables: $APPNAME
-      path = "dist/hello-server"
-
-      # Copy the file to a local directory
-      [Build.Output.File.FileCopy]
-
-        # Destination directory
-        path = "/tmp/baur_build_artifacts/$APPNAME-$GITCOMMIT"
+# Task-includes that the task inherits.
+# Includes are specified in the format <filepath>#<ID>.
+# Paths are relative to the application directory.
+#. Valid variables: $ROOT.
+includes = ["$ROOT/baur-includes/go-build.toml#build"]

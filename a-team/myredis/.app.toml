@@ -2,39 +2,44 @@
 # Name of the application
 name = "myredis"
 
-[Build]
+[[Task]]
 
-  # Command to build the application
+  # Identifies the task, currently the name must be 'build'.
+  name = "build"
+
+  # Command to execute. The command is run via the sh shell.
   command = "docker build --iidfile .container.id ."
 
-  # Specification of build inputs like source files, Makefiles, etc
-  [Build.Input]
+  # Specification of task inputs like source files, Makefiles, etc
+  [Task.Input]
 
     # Inputs specified by path, matching only Git tracked files
-    [Build.Input.GitFiles]
+    [Task.Input.GitFiles]
 
       # Relative paths to source files.
       # Only files tracked by Git that are not in the .gitignore file are matched.
       # The same patterns that git ls-files supports can be used.
-      # Valid variables: $ROOT
+      # Valid variables: $ROOT, $APPNAME.
       paths = ["Dockerfile"]
 
-  # Specification of build outputs produced by the [Build.command]
-  [Build.Output]
+  # Specification of task outputs produced by the Task.command
+  [Task.Output]
 
-    [[Build.Output.DockerImage]]
+    [[Task.Output.DockerImage]]
 
-      # Path to a file that is created by [Build.Command] and contains the image ID of the produced image (docker build --iidfile), valid variables: $APPNAME
+      # Path to a file that is created by the [Task.Command] and contains the image ID of the produced image (docker build --iidfile).
+      # Valid variables: $ROOT, $APPNAME
       idfile = ".container.id"
 
-      # Registry repository the image is uploaded to
-      [Build.Output.DockerImage.RegistryUpload]
+      # Registry and repository the image is uploaded to
+      [Task.Output.DockerImage.RegistryUpload]
 
-        # Registry address in the format <HOST>:[<PORT>], if empty the default from the docker agent is used
+        # Registry address in the format <HOST>:[<PORT>]. If it's empty the default from the docker agent is used.
         registry = "localhost:5000"
 
-        # Repository path, format: [<server[:port]>/]<owner>/<repository>:<tag>, valid variables: $APPNAME
+        # Repository name, Valid variables: $APPNAME
         repository = "baur-example/$APPNAME"
 
-        # Tag that is applied to the image, valid variables: $APPNAME, $UUID, $GITCOMMIT
+        # Tag that is applied to the image.
+        # Valid variables: $APPNAME, $UUID, $GITCOMMIT
         tag = "$GITCOMMIT"

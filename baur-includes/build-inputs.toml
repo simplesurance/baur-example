@@ -1,0 +1,14 @@
+
+[[Input]]
+
+  # identifier of the include
+  include_id = "build-sh"
+
+  # Inputs specified by path, matching only Git tracked files
+  [Input.GitFiles]
+
+    # Relative paths to source files.
+    # Only files tracked by Git that are not in the .gitignore file are matched.
+    # The same patterns that git ls-files supports can be used.
+    # Valid variables: $ROOT, $APPNAME.
+    paths = ["build.sh"]
