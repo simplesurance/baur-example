@@ -14,34 +14,13 @@ name = "random"
   name = "build"
 
   # Command to execute. The command is run via the sh shell.
-  command = "./build.sh"
+  command = "./build.sh build"
 
   # Input or Output includes that the task inherits.
   # Includes are specified in the format <filepath>#<ID>.
   # Paths are relative to the application directory.
   #. Valid variables: $ROOT.
-includes = ["$ROOT/baur-includes/build-inputs.toml#build-sh"]
-
-  # Specification of task inputs like source files, Makefiles, etc
-  [Task.Input]
-
-    # Inputs specified by file glob paths
-    [Task.Input.Files]
-
-      # Relative path to source files.
-      # Golang's Glob syntax (https://golang.org/pkg/path/filepath/#Match)
-      # and ** is supported to match files recursively.
-      # Valid variables: $ROOT, $APPNAME, $GITCOMMIT.
-      # paths = ["dbmigrations/*.sql"]
-
-    # Inputs specified by path, matching only Git tracked files
-    [Task.Input.GitFiles]
-
-      # Relative paths to source files.
-      # Only files tracked by Git that are not in the .gitignore file are matched.
-      # The same patterns that git ls-files supports can be used.
-      # Valid variables: $ROOT, $APPNAME.
-      # paths = ["Makefile"]
+  includes = ["$ROOT/baur-includes/build-inputs.toml#build-sh"]
 
     # Inputs specified by directories containing Golang applications
     [Task.Input.GolangSources]
@@ -57,46 +36,22 @@ includes = ["$ROOT/baur-includes/build-inputs.toml#build-sh"]
       # files from Go's stdlib package and testfiles are ignored. Valid variables: $ROOT, $APPNAME.
       paths = ["."]
 
-  # Specification of task outputs produced by the Task.command
-  [Task.Output]
 
-    [[Task.Output.DockerImage]]
+[[Task]]
+  name = "check"
 
-      # Path to a file that is created by the [Task.Command] and contains the image ID of the produced image (docker build --iidfile).
+  command = "./build.sh check"
+  includes = ["$ROOT/baur-includes/build-inputs.toml#build-sh"]
+
+    [Task.Input.GolangSources]
+
+      # Environment to use when discovering Golang source files
+      # This can be environment variables understood by the Golang tools, like GOPATH, GOFLAGS, etc.
+      # If empty the default Go environment is used.
       # Valid variables: $ROOT, $APPNAME
-      # idfile = "$APPNAME-container.id"
+      environment = ["GOFLAGS=-mod=vendor","GO111MODULE=on"]
 
-      # Registry and repository the image is uploaded to
-      [Task.Output.DockerImage.RegistryUpload]
-
-        # Registry address in the format <HOST>:[<PORT>]. If it's empty the default from the docker agent is used.
-        # registry = ""
-
-        # Repository name, Valid variables: $APPNAME
-        # repository = "my-company/$APPNAME"
-
-        # Tag that is applied to the image.
-        # Valid variables: $APPNAME, $UUID, $GITCOMMIT
-        # tag = "$GITCOMMIT"
-
-    [[Task.Output.File]]
-
-      # Path relative to the application directory.
-      # Valid variables: $ROOT, $APPNAME, $GITCOMMIT.
-      path = "dist/randomnumber"
-
-      # Copy the file to a local directory.
-      [Task.Output.File.FileCopy]
-
-        # Destination directory
-        # Valid variables: $ROOT, $APPNAME, $GITCOMMIT, $UUID.
-        path = "/tmp/baur_build_artifacts/$APPNAME-$GITCOMMIT"
-
-      # Upload the file to S3.
-      [Task.Output.File.S3Upload]
-
-        # Bucket name, valid variables: $APPNAME, $UUID, $GITCOMMIT
-        # bucket = "go-artifacts/"
-
-        # Remote File Name, valid variables: $ROOT, $APPNAME, $UUID, $GITCOMMIT
-        # dest_file = "$APPNAME-$GITCOMMIT.tar.xz"
+      # Paths to directories containing Golang source files.
+      # All source files including imported packages are discovered,
+      # files from Go's stdlib package and testfiles are ignored. Valid variables: $ROOT, $APPNAME.
+      paths = ["."]
