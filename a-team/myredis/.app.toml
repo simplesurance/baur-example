@@ -4,7 +4,7 @@ name = "myredis"
 
 [Build]
 
-  # Command to build the application
+  # Command to build the application, valid variables: $ROOT, $APPNAME
   command = "docker build --iidfile .container.id ."
 
   # Specification of build inputs like source files, Makefiles, etc

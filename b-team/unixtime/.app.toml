@@ -4,7 +4,7 @@ name = "unixtime"
 
 [Build]
 
-  # Command to build the application
+  # Command to build the application, valid variables: $ROOT, $APPNAME
   command = "make clean docker_build"
 
   # Repository relative paths to baur include files that the build inherits.
