@@ -1,0 +1,39 @@
+# Application name
+name = "unixtime"
+
+[[Task]]
+  # Task name
+  name = "build"
+
+  # Command to execute.
+  # The first element is the command, the following its arguments.
+  command = ["make", "clean", "build"]
+
+  # Inputs are tracked, when they change the task is rerun.
+  [Task.Input]
+    [[Task.Input.Files]]
+      # Glob patterns that match files.
+      # All Paths are relative to the application directory.
+      # Golang's Glob syntax (https://golang.org/pkg/path/filepath/#Match)
+      # and ** is supported to match files recursively.
+      paths = [
+        "*.c",
+        "Makefile",
+      ]
+
+      # When optional is true a path pattern that matches 0 files will not cause an error.
+      optional = false
+
+      # Only resolve to files that are part of the Git repository.
+      git_tracked_only = true
+
+  # Artifacts produced by the Task.command and their upload destinations.
+  [Task.Output]
+    [[Task.Output.File]]
+
+      # Path relative to the application directory.
+      path = "dist/{{ .AppName }}"
+
+      [[Task.Output.File.FileCopy]]
+        # Destination directory
+        path = "/tmp/baur_build_artifacts/{{ .AppName }}-{{ gitCommit }}"

@@ -1,40 +1,43 @@
-
-# Name of the application
+# Application name
 name = "myredis"
 
-[Build]
+[[Task]]
+  # Task name
+  name = "build"
 
-  # Command to build the application, valid variables: $ROOT, $APPNAME
-  command = "docker build --iidfile .container.id ."
+  # Command to execute.
+  # The first element is the command, the following its arguments.
+  command = ["docker", "build", "--iidfile", ".container.id", "."]
 
-  # Specification of build inputs like source files, Makefiles, etc
-  [Build.Input]
+  # Inputs are tracked, when they change the task is rerun.
+   [Task.Input]
+     [[Task.Input.Files]]
 
-    # Inputs specified by path, matching only Git tracked files
-    [Build.Input.GitFiles]
+       # Glob patterns that match files.
+       # All Paths are relative to the application directory.
+       # Golang's Glob syntax (https://golang.org/pkg/path/filepath/#Match)
+       # and ** is supported to match files recursively.
+       paths = ["Dockerfile"]
 
-      # Relative paths to source files.
-      # Only files tracked by Git that are not in the .gitignore file are matched.
-      # The same patterns that git ls-files supports can be used.
-      # Valid variables: $ROOT
-      paths = ["Dockerfile"]
+  # Artifacts produced by the Task.command and their upload destinations.
+  [Task.Output]
+    [[Task.Output.DockerImage]]
 
-  # Specification of build outputs produced by the [Build.command]
-  [Build.Output]
-
-    [[Build.Output.DockerImage]]
-
-      # Path to a file that is created by [Build.Command] and contains the image ID of the produced image (docker build --iidfile), valid variables: $APPNAME
+      # File containing the image ID of the produced image (docker build --iidfile).
       idfile = ".container.id"
 
-      # Registry repository the image is uploaded to
-      [Build.Output.DockerImage.RegistryUpload]
+      [[Task.Output.DockerImage.RegistryUpload]]
 
-        # Registry address in the format <HOST>:[<PORT>], if empty the default from the docker agent is used
+        # Registry address in the format <HOST>:[<PORT>]. If it's empty the docker agent's default is used.
         registry = "localhost:5000"
 
-        # Repository path, format: [<server[:port]>/]<owner>/<repository>:<tag>, valid variables: $APPNAME
-        repository = "baur-example/$APPNAME"
+        repository = "baur-example/{{ .AppName }}"
+        tag = "{{ gitCommit }}"
 
-        # Tag that is applied to the image, valid variables: $APPNAME, $UUID, $GITCOMMIT
-        tag = "$GITCOMMIT"
+      [[Task.Output.DockerImage.RegistryUpload]]
+
+        # Registry address in the format <HOST>:[<PORT>]. If it's empty the docker agent's default is used.
+        registry = "localhost:5000"
+
+        repository = "baur-example/{{ .AppName }}"
+        tag = "latest"
