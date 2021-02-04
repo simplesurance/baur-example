@@ -1,0 +1,29 @@
+name = "rng"
+
+includes = [
+  "{{ .Root }}/baur-includes/go_tasks.toml#test",
+  "{{ .Root }}/baur-includes/go_tasks.toml#check",
+]
+
+[[Task]]
+  name = "build"
+  command = ["./build.sh", "build"]
+
+  includes = ["{{ .Root }}/baur-includes/inputs.toml#input_buildscript"]
+
+  [Task.Input]
+    [[Task.Input.GolangSources]]
+      queries = ["./..."]
+      environment = [
+        "GOFLAGS=-mod=vendor",
+        "GO111MODULE=on",
+      ]
+      build_flags = []
+      tests = false
+
+  [Task.Output]
+    [[Task.Output.File]]
+      path = "dist/randomnumber"
+
+      [[Task.Output.File.FileCopy]]
+        path = "/tmp/baur_build_artifacts/{{ .AppName }}-{{ gitCommit }}"
