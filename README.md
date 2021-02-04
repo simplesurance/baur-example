@@ -1,7 +1,9 @@
 # baur Example Repository
+
 Main baur repository: <https://github.com/simplesurance/baur>
 
 ## Requirements
+
 The following applications needs to be installed to experiment with baur in the
 example repository:
 
@@ -12,6 +14,7 @@ example repository:
 - Docker
 
 ## Quickstart
+
 - Clone this repository
   ```
   git clone git@github.com:simplesurance/baur-example.git
@@ -31,27 +34,28 @@ example repository:
 Now you can start with experimenting with baur.
 Some commands to start with are:
 
-- List applications in the repository with their build status:
+- List Tasks in the repository with their build status:
   ```
-  baur ls apps
+  baur status
   ```
-- Build all applications with outstanding builds, upload their artifacts and
+- Run all tasks with outstanding status, upload their artifacts and
   record the results:
   ```
-  baur build
+  baur run
   ```
-  (The first run of the `baur build` command in this repository can take a bit
+  (The first run of the `baur run` command in this repository can take a bit
   longer because docker images are build during the build)
 
-- List recorded builds:
+- List recorded runs:
   ```
-  baur ls builds all
+  baur ls runs all
   ```
 - Show information about the "unixtime" application:
   ```
   baur show unixtime
   ```
-- Show the build inputs with their digests of the "hello-server" application:
+- Show the build inputs with their digests of the build tasks of the
+- "hello-server" application:
   ```
-  baur ls inputs --digests hello-server
+  baur ls inputs --digests hello-server.build
   ```

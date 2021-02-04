@@ -1,6 +1,6 @@
 
 # Version of baur configuration format
-config_version = 4
+config_version = 5
 
 [Database]
 
@@ -11,7 +11,10 @@ config_version = 4
 [Discover]
 
   # List of directories containing applications, example: ['go/code', 'shop/']
-  application_dirs = ["a-team/","b-team"]
+  application_dirs = [
+    "a-team/",
+    "b-team",
+  ]
 
   # Descend at most SearchDepth levels to find application configs
   search_depth = 7

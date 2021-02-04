@@ -2,37 +2,57 @@
 # Name of the application
 name = "unixtime"
 
-[Build]
+# Task-includes that the task inherits.
+# Includes are specified in the format <filepath>#<ID>.
+# Paths are relative to the application directory.
+includes = []
 
-  # Command to build the application, valid variables: $ROOT, $APPNAME
-  command = "make clean docker_build"
+[[Task]]
+  name = "build"
 
-  # Repository relative paths to baur include files that the build inherits.
-  # Valid variables: $ROOT
+  # Command to execute.
+  # The first element is the command, the following it's arguments.
+  # If the command element contains no path seperators,
+  # the path is looked up via the $PATH environment variable.
+  command = [
+    "sh",
+    "-c",
+    "make clean docker_build",
+  ]
+
+  # Input or Output includes that the task inherits.
+  # Includes are specified in the format <filepath>#<ID>.
+  # Paths are relative to the application directory.
   includes = []
 
-  # Specification of build inputs like source files, Makefiles, etc
-  [Build.Input]
+  # Specification of task inputs like source files, Makefiles, etc
+  [Task.Input]
 
-    # Inputs specified by path, matching only Git tracked files
-    [Build.Input.GitFiles]
+    [[Task.Input.Files]]
 
-      # Relative paths to source files.
-      # Only files tracked by Git that are not in the .gitignore file are matched.
-      # The same patterns that git ls-files supports can be used.
-      # Valid variables: $ROOT
-      paths = ["*.c", "Makefile"]
+      # Relative path to source files.
+      # Golang's Glob syntax (https://golang.org/pkg/path/filepath/#Match)
+      # and ** is supported to match files recursively.
+      paths = [
+        "*.c",
+        "Makefile",
+      ]
 
-  # Specification of build outputs produced by the [Build.command]
-  [Build.Output]
+      # If true, baur will not fail if a Path resolves to 0 files.
+      optional = false
 
-    [[Build.Output.File]]
+      # Ignore files that are not tracked in git.
+      git_tracked_only = true
 
-      # Path relative to the application directory, valid variables: $APPNAME
+  # Specification of task outputs produced by the Task.command
+  [Task.Output]
+
+    [[Task.Output.File]]
+
+      # Path relative to the application directory.
       path = "dist/unixtime"
 
-      # Copy the file to a local directory
-      [Build.Output.File.FileCopy]
+      [[Task.Output.File.FileCopy]]
 
         # Destination directory
-        path = "/tmp/baur_build_artifacts/$APPNAME-$GITCOMMIT"
+        path = "/tmp/baur_build_artifacts/{{ .appname }}-{{ .gitcommit }}"

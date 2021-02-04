@@ -1,0 +1,18 @@
+
+[[Input]]
+
+  # identifier of the include
+  include_id = "input_buildscript"
+
+  [[Input.Files]]
+
+    # Relative path to source files.
+    # Golang's Glob syntax (https://golang.org/pkg/path/filepath/#Match)
+    # and ** is supported to match files recursively.
+    paths = ["build.sh"]
+
+    # If true, baur will not fail if a Path resolves to 0 files.
+    optional = false
+
+    # Ignore files that are not tracked in git.
+    git_tracked_only = true

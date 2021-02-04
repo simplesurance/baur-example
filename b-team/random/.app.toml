@@ -2,50 +2,79 @@
 # Name of the application
 name = "random"
 
-[Build]
+# Task-includes that the task inherits.
+# Includes are specified in the format <filepath>#<ID>.
+# Paths are relative to the application directory.
+includes = ["{{ .root }}/baur-includes/go_tasks.toml#test"]
 
-  # Command to build the application, valid variables: $ROOT, $APPNAME
-  command = "./build.sh"
+[[Task]]
+  name = "build"
 
-  # Repository relative paths to baur include files that the build inherits.
-  # Valid variables: $ROOT
-  includes = ["$ROOT/baur-includes/input_build_script.toml"]
+  # Command to execute.
+  # The first element is the command, the following it's arguments.
+  # If the command element contains no path seperators,
+  # the path is looked up via the $PATH environment variable.
+  command = ["./build.sh", "build"]
 
-  # Specification of build inputs like source files, Makefiles, etc
-  [Build.Input]
+  # Input or Output includes that the task inherits.
+  # Includes are specified in the format <filepath>#<ID>.
+  # Paths are relative to the application directory.
+  includes = ["{{ .root }}/baur-includes/inputs.toml#input_buildscript"]
 
-    # Inputs specified by file glob paths
-    [Build.Input.Files]
+  # Specification of task inputs like source files, Makefiles, etc
+  [Task.Input]
 
-      # Relative path to source files,
-      # supports Golang's Glob syntax (https://golang.org/pkg/path/filepath/#Match) and
-      # ** to match files recursively
-      # Valid variables: $ROOT
-      # paths = ["dbmigrations/*.sql"]
+    [[Task.Input.GolangSources]]
 
-    # Inputs specified by directories containing Golang applications
-    [Build.Input.GolangSources]
+      # Queries specify the source files or packages of which the dependencies are resolved.
+      # Format:
+      # 	file=<RELATIVE-PATH>
+      # 	fileglob=<GLOB-PATTERN>	 -> Supports double-star
+      # 	Everything else is passed directly to underlying build tool (go list by default).
+      # 	See also the patterns described at:
+      # 	<https://github.com/golang/tools/blob/bc8aaaa29e0665201b38fa5cb5d47826788fa249/go/packages/doc.go#L17>.
+      # Files from Golang's stdlib are ignored.
+      queries = ["./..."]
 
-      # Environment to use when discovering Golang source files
-      # This can be environment variables understood by the Golang tools, like GOPATH, GOFLAGS, etc.
-      # If empty the default Go environment is used.
-      # Valid variables: $ROOT
-      environment = ["GOFLAGS=-mod=vendor","GO111MODULE=on"]
+      # Environment to use when discovering Golang source files.
+      # Variables from the current environment are not used.
+      # These shoul be environment variables understood by the Golang tools, like GOPATH, GOFLAGS, etc.
+      # If empty the default Go environment is used
+      environment = [
+        "GOFLAGS=-mod=vendor",
+        "GO111MODULE=on",
+      ]
 
-      # Paths to directories containing Golang source files.
-      # All source files including imported packages are discovered,
-      # files from Go's stdlib package and testfiles are ignored.
-      paths = ["."]
+      # List of command-line flags to be passed through to the build system's query tool.
+      build_flags = []
 
-  # Specification of build outputs produced by the [Build.command]
-  [Build.Output]
-    [[Build.Output.File]]
+      # If true queries are resolved to test files, otherwise testfiles are ignored.
+      tests = false
 
-      # Path relative to the application directory, valid variables: $APPNAME
+  # Specification of task outputs produced by the Task.command
+  [Task.Output]
+
+    [[Task.Output.File]]
+
+      # Path relative to the application directory.
       path = "dist/randomnumber"
 
-      # Copy the file to a local directory
-      [Build.Output.File.FileCopy]
+      [[Task.Output.File.FileCopy]]
 
         # Destination directory
-        path = "/tmp/baur_build_artifacts/$APPNAME-$GITCOMMIT"
+        path = "/tmp/baur_build_artifacts/{{ .appname }}-{{ .gitcommit }}"
+
+[[Task]]
+  name = "check"
+  command = ["./build.sh", "check"]
+  includes = ["{{ .root }}/baur-includes/inputs.toml#input_buildscript"]
+
+  [Task.Input]
+    [[Task.Input.GolangSources]]
+      queries = ["./..."]
+      environment = [
+        "GOFLAGS=-mod=vendor",
+        "GO111MODULE=on",
+      ]
+      build_flags = []
+      tests = false

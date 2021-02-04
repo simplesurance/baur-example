@@ -2,39 +2,56 @@
 # Name of the application
 name = "myredis"
 
-[Build]
+# Task-includes that the task inherits.
+# Includes are specified in the format <filepath>#<ID>.
+# Paths are relative to the application directory.
+includes = []
 
-  # Command to build the application, valid variables: $ROOT, $APPNAME
-  command = "docker build --iidfile .container.id ."
+[[Task]]
+  name = "build"
 
-  # Specification of build inputs like source files, Makefiles, etc
-  [Build.Input]
+  # Command to execute.
+  # The first element is the command, the following it's arguments.
+  # If the command element contains no path seperators,
+  # the path is looked up via the $PATH environment variable.
+  command = ["docker", "build", "--iidfile", ".container.id", "."]
 
-    # Inputs specified by path, matching only Git tracked files
-    [Build.Input.GitFiles]
+  # Input or Output includes that the task inherits.
+  # Includes are specified in the format <filepath>#<ID>.
+  # Paths are relative to the application directory.
+  includes = []
 
-      # Relative paths to source files.
-      # Only files tracked by Git that are not in the .gitignore file are matched.
-      # The same patterns that git ls-files supports can be used.
-      # Valid variables: $ROOT
+  # Specification of task inputs like source files, Makefiles, etc
+  [Task.Input]
+
+    [[Task.Input.Files]]
+
+      # Relative path to source files.
+      # Golang's Glob syntax (https://golang.org/pkg/path/filepath/#Match)
+      # and ** is supported to match files recursively.
       paths = ["Dockerfile"]
 
-  # Specification of build outputs produced by the [Build.command]
-  [Build.Output]
+      # If true, baur will not fail if a Path resolves to 0 files.
+      optional = false
 
-    [[Build.Output.DockerImage]]
+      # Ignore files that are not tracked in git.
+      git_tracked_only = true
 
-      # Path to a file that is created by [Build.Command] and contains the image ID of the produced image (docker build --iidfile), valid variables: $APPNAME
+  # Specification of task outputs produced by the Task.command
+  [Task.Output]
+
+    [[Task.Output.DockerImage]]
+
+      # Path to a file that is created by the [Task.Command] and contains the image ID of the produced image (docker build --iidfile).
       idfile = ".container.id"
 
-      # Registry repository the image is uploaded to
-      [Build.Output.DockerImage.RegistryUpload]
+      [[Task.Output.DockerImage.RegistryUpload]]
 
-        # Registry address in the format <HOST>:[<PORT>], if empty the default from the docker agent is used
+        # Registry address in the format <HOST>:[<PORT>]. If it's empty the default from the docker agent is used.
         registry = "localhost:5000"
 
-        # Repository path, format: [<server[:port]>/]<owner>/<repository>:<tag>, valid variables: $APPNAME
-        repository = "baur-example/$APPNAME"
+        # Repository name
+        repository = "baur-example/{{ .appname }}"
 
-        # Tag that is applied to the image, valid variables: $APPNAME, $UUID, $GITCOMMIT
-        tag = "$GITCOMMIT"
+        # Tag that is applied to the image.
+        tag = "{{ .gitcommit }}"

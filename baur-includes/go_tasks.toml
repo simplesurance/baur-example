@@ -1,0 +1,41 @@
+ [[Task]]
+
+   # identifier of the include
+   include_id = "test"
+   name = "test"
+
+   # Command to execute. The first element is the command, the following it's arguments.
+   # If the command element contains no path seperators, it's paths is tried to be looked up via the $PATH environment variable.
+   command = ["./build.sh", "test"]
+
+   # Input or Output includes that the task inherits.
+   # Includes are specified in the format <filepath>#<ID>.
+   # Paths are relative to the include file location.
+   includes = []
+
+   # Specification of task inputs like source files, Makefiles, etc
+   [Task.Input]
+
+#     [[Task.Input.GolangSources]]
+#
+#       # Queries specify the source files or packages of which the dependencies are resolved.
+#       # Format:
+#       # 	file=<RELATIVE-PATH>
+#       # 	fileglob=<GLOB-PATTERN>	 -> Supports double-star
+#       # 	Everything else is passed directly to underlying build tool (go list by default).
+#       # 	See also the patterns described at:
+#       # 	<https://github.com/golang/tools/blob/bc8aaaa29e0665201b38fa5cb5d47826788fa249/go/packages/doc.go#L17>.
+#       # Files from Golang's stdlib are ignored.
+       queries = ["./..."]
+#
+#       # Environment to use when discovering Golang source files.
+#       # Variables from the current environment are not used.
+#       # These shoul be environment variables understood by the Golang tools, like GOPATH, GOFLAGS, etc.
+#       # If empty the default Go environment is used
+#       environment = []
+#
+#       # List of command-line flags to be passed through to the build system's query tool.
+#       build_flags = []
+#
+#       # If true queries are resolved to test files, otherwise testfiles are ignored.
+       tests = true
