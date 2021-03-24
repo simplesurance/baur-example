@@ -4,12 +4,12 @@ name = "random"
 
 [Build]
 
-  # Command to build the application, valid variables: $ROOT, $APPNAME
+  # Command to build the application, valid variables: {{ .root }}, {{ .appname }}
   command = "./build.sh"
 
   # Repository relative paths to baur include files that the build inherits.
-  # Valid variables: $ROOT
-  includes = ["$ROOT/baur-includes/input_build_script.toml"]
+  # Valid variables: {{ .root }}
+  includes = ["{{ .root }}/baur-includes/input_build_script.toml"]
 
   # Specification of build inputs like source files, Makefiles, etc
   [Build.Input]
@@ -20,7 +20,7 @@ name = "random"
       # Relative path to source files,
       # supports Golang's Glob syntax (https://golang.org/pkg/path/filepath/#Match) and
       # ** to match files recursively
-      # Valid variables: $ROOT
+      # Valid variables: {{ .root }}
       # paths = ["dbmigrations/*.sql"]
 
     # Inputs specified by directories containing Golang applications
@@ -29,7 +29,7 @@ name = "random"
       # Environment to use when discovering Golang source files
       # This can be environment variables understood by the Golang tools, like GOPATH, GOFLAGS, etc.
       # If empty the default Go environment is used.
-      # Valid variables: $ROOT
+      # Valid variables: {{ .root }}
       environment = ["GOFLAGS=-mod=vendor","GO111MODULE=on"]
 
       # Paths to directories containing Golang source files.
@@ -41,11 +41,11 @@ name = "random"
   [Build.Output]
     [[Build.Output.File]]
 
-      # Path relative to the application directory, valid variables: $APPNAME
+      # Path relative to the application directory, valid variables: {{ .appname }}
       path = "dist/randomnumber"
 
       # Copy the file to a local directory
       [Build.Output.File.FileCopy]
 
         # Destination directory
-        path = "/tmp/baur_build_artifacts/$APPNAME-$GITCOMMIT"
+        path = "/tmp/baur_build_artifacts/{{ .appname }}-{{ gitcommit }}"

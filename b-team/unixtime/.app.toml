@@ -4,11 +4,11 @@ name = "unixtime"
 
 [Build]
 
-  # Command to build the application, valid variables: $ROOT, $APPNAME
+  # Command to build the application, valid variables: {{ .root }}, {{ .appname }}
   command = "make clean docker_build"
 
   # Repository relative paths to baur include files that the build inherits.
-  # Valid variables: $ROOT
+  # Valid variables: {{ .root }}
   includes = []
 
   # Specification of build inputs like source files, Makefiles, etc
@@ -20,7 +20,7 @@ name = "unixtime"
       # Relative paths to source files.
       # Only files tracked by Git that are not in the .gitignore file are matched.
       # The same patterns that git ls-files supports can be used.
-      # Valid variables: $ROOT
+      # Valid variables: {{ .root }}
       paths = ["*.c", "Makefile"]
 
   # Specification of build outputs produced by the [Build.command]
@@ -28,11 +28,11 @@ name = "unixtime"
 
     [[Build.Output.File]]
 
-      # Path relative to the application directory, valid variables: $APPNAME
+      # Path relative to the application directory, valid variables: {{ .appname }}
       path = "dist/unixtime"
 
       # Copy the file to a local directory
       [Build.Output.File.FileCopy]
 
         # Destination directory
-        path = "/tmp/baur_build_artifacts/$APPNAME-$GITCOMMIT"
+        path = "/tmp/baur_build_artifacts/{{ .appname }}-{{ gitcommit }}"

@@ -4,12 +4,12 @@ name = "hello-server"
 
 [Build]
 
-  # Command to build the application, valid variables: $ROOT, $APPNAME
+  # Command to build the application, valid variables: {{ .root }}, {{ .appname }}
   command = "./build.sh"
 
   # Repository relative paths to baur include files that the build inherits.
-  # Valid variables: $ROOT
-  includes = ["$ROOT/baur-includes/input_build_script.toml"]
+  # Valid variables: {{ .root }}
+  includes = ["{{ .root }}/baur-includes/input_build_script.toml"]
 
   # Specification of build inputs like source files, Makefiles, etc
   [Build.Input]
@@ -20,7 +20,7 @@ name = "hello-server"
       # Relative path to source files,
       # supports Golang's Glob syntax (https://golang.org/pkg/path/filepath/#Match) and
       # ** to match files recursively
-      # Valid variables: $ROOT
+      # Valid variables: {{ .root }}
       paths = ["build.sh"]
 
     # Inputs specified by directories containing Golang applications
@@ -29,8 +29,8 @@ name = "hello-server"
       # Environment to use when discovering Golang source files
       # This can be environment variables understood by the Golang tools, like GOPATH, GOFLAGS, etc.
       # If empty the default Go environment is used.
-      # Valid variables: $ROOT
-      environment = ["GOPATH=$ROOT/a-team/go"]
+      # Valid variables: {{ .root }}
+      environment = ["GOPATH={{ .root }}/a-team/go"]
 
       # Paths to directories containing Golang source files.
       # All source files including imported packages are discovered,
@@ -42,11 +42,11 @@ name = "hello-server"
 
     [[Build.Output.File]]
 
-      # Path relative to the application directory, valid variables: $APPNAME
+      # Path relative to the application directory, valid variables: {{ .appname }}
       path = "dist/hello-server"
 
       # Copy the file to a local directory
       [Build.Output.File.FileCopy]
 
         # Destination directory
-        path = "/tmp/baur_build_artifacts/$APPNAME-$GITCOMMIT"
+        path = "/tmp/baur_build_artifacts/{{ .appname }}-{{ gitcommit }}"
