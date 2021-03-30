@@ -51,7 +51,7 @@ includes = []
         registry = "localhost:5000"
 
         # Repository name
-        repository = "baur-example/{{ .appname }}"
+        repository = "baur-example/{{ .AppName }}"
 
         # Tag that is applied to the image.
-        tag = "{{ .gitcommit }}"
+        tag = "{{ gitCommit }}"

@@ -5,7 +5,7 @@ name = "random"
 # Task-includes that the task inherits.
 # Includes are specified in the format <filepath>#<ID>.
 # Paths are relative to the application directory.
-includes = ["{{ .root }}/baur-includes/go_tasks.toml#test"]
+includes = ["{{ .Root }}/baur-includes/go_tasks.toml#test"]
 
 [[Task]]
   name = "build"
@@ -19,7 +19,7 @@ includes = ["{{ .root }}/baur-includes/go_tasks.toml#test"]
   # Input or Output includes that the task inherits.
   # Includes are specified in the format <filepath>#<ID>.
   # Paths are relative to the application directory.
-  includes = ["{{ .root }}/baur-includes/inputs.toml#input_buildscript"]
+  includes = ["{{ .Root }}/baur-includes/inputs.toml#input_buildscript"]
 
   # Specification of task inputs like source files, Makefiles, etc
   [Task.Input]
@@ -62,12 +62,17 @@ includes = ["{{ .root }}/baur-includes/go_tasks.toml#test"]
       [[Task.Output.File.FileCopy]]
 
         # Destination directory
-        path = "/tmp/baur_build_artifacts/{{ .appname }}-{{ .gitcommit }}"
+        path = "/tmp/baur_build_artifacts/{{ .AppName }}-{{ gitCommit }}"
+
+      [[Task.Output.File.FileCopy]]
+
+        # Destination directory
+        path = "/tmp/baur_build_artifacts/{{ .AppName }}-{{ gitCommit }}-1"
 
 [[Task]]
   name = "check"
   command = ["./build.sh", "check"]
-  includes = ["{{ .root }}/baur-includes/inputs.toml#input_buildscript"]
+  includes = ["{{ .Root }}/baur-includes/inputs.toml#input_buildscript"]
 
   [Task.Input]
     [[Task.Input.GolangSources]]

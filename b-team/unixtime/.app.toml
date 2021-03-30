@@ -55,4 +55,4 @@ includes = []
       [[Task.Output.File.FileCopy]]
 
         # Destination directory
-        path = "/tmp/baur_build_artifacts/{{ .appname }}-{{ .gitcommit }}"
+        path = "/tmp/baur_build_artifacts/{{ .AppName }}-{{ gitCommit }}"

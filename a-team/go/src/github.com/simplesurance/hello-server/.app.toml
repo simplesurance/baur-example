@@ -17,7 +17,7 @@ includes = []
   # Input or Output includes that the task inherits.
   # Includes are specified in the format <filepath>#<ID>.
   # Paths are relative to the application directory.
-  includes = ["{{ .root }}/baur-includes/inputs.toml#input_buildscript"]
+  includes = ["{{ .Root }}/baur-includes/inputs.toml#input_buildscript"]
 
   # Specification of task inputs like source files, Makefiles, etc
   [Task.Input]
@@ -51,7 +51,10 @@ includes = []
       # Variables from the current environment are not used.
       # These shoul be environment variables understood by the Golang tools, like GOPATH, GOFLAGS, etc.
       # If empty the default Go environment is used
-      environment = ["GOPATH={{ .root }}/a-team/go"]
+      environment = [
+        "GOPATH={{ .Root }}/a-team/go",
+        "GO111MODULE=off",
+        ]
 
       # List of command-line flags to be passed through to the build system's query tool.
       build_flags = []
@@ -70,4 +73,4 @@ includes = []
       [[Task.Output.File.FileCopy]]
 
         # Destination directory
-        path = "/tmp/baur_build_artifacts/{{ .appname }}-{{ .gitcommit }}"
+        path = "/tmp/baur_build_artifacts/{{ .AppName }}-{{ gitCommit }}"
