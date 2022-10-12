@@ -10,11 +10,13 @@ if [ $# -ne 1 ]; then
 	exit 1
 fi
 
+RNG_VERSION="${RNG_VERSION:-unset}"
+
 if [ "$1" = "build" ]; then
 	docker run --rm --init -e HOME=/tmp/ --user="$(id -u):$(id -g)" \
 		   -v "$SCRIPT_DIR":/code -w /code  \
 		   $DOCKER_IMG \
-		   go build -o "dist/randomnumber" main.go
+		   go build -ldflags="-X main.Version=$RNG_VERSION" -o "dist/randomnumber" main.go
 elif [ "$1" = "check" ]; then
 	docker run --rm --init -e HOME=/tmp/ --user="$(id -u):$(id -g)" \
 		   -v "$SCRIPT_DIR":/code -w /code  \

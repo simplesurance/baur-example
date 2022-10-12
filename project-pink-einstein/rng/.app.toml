@@ -27,3 +27,9 @@ includes = [
 
       [[Task.Output.File.FileCopy]]
         path = "/tmp/baur_build_artifacts/{{ .AppName }}-{{ gitCommit }}"
+
+    [[Task.Input.EnvironmentVariables]]
+      names = [
+        "RNG_*",
+      ]
+      optional = true
