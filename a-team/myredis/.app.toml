@@ -17,7 +17,16 @@ name = "myredis"
        # All Paths are relative to the application directory.
        # Golang's Glob syntax (https://golang.org/pkg/path/filepath/#Match)
        # and ** is supported to match files recursively.
-       paths = ["Dockerfile"]
+       paths = ["*"]
+
+   [Task.Input.ExcludedFiles]
+
+     # Specifies files that are excluded from the Inputs.
+     # ExcludedFiles are processed after all other Input types.
+     # All Paths are relative to the application directory.
+     # Golang's Glob syntax (https://golang.org/pkg/path/filepath/#Match)
+     # and ** is supported to match files recursively.
+     paths = ["*.md"]
 
   # Artifacts produced by the Task.command and their upload destinations.
   [Task.Output]
