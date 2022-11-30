@@ -1,20 +1,20 @@
 
-# Version of baur configuration format
-config_version = 5
+# Internal field, version of baur configuration format
+config_version = 6
 
 [Database]
 
-  # Connection string to the PostgreSQL database, see https://www.postgresql.org/docs/current/static/libpq-connect.html#LIBPQ-CONNSTRING
+  # PostgreSQL database Connection string (https://www.postgresql.org/docs/current/static/libpq-connect.html#LIBPQ-CONNSTRING)
+  # The setting is overwritten by the environment variable BAUR_POSTGRESQL_URL.
   postgresql_url = "postgres://postgres@localhost:5433/baur?sslmode=disable&connect_timeout=5"
 
-# Application discovery settings
 [Discover]
 
-  # List of directories containing applications, example: ['go/code', 'shop/']
+  # Directories in which applications (.app.toml files) are discovered
   application_dirs = [
     "a-team",
     "project-pink-einstein",
   ]
 
-  # Descend at most SearchDepth levels to find application configs
+  # Descend at most search_depth levels to find application configs
   search_depth = 7
